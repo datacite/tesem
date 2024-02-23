@@ -10,10 +10,10 @@ jobs:
       image_name: ${{ github.repository }}
       image_tag: main
     secrets: inherit
-  # deploy:
-  #   needs: [call_build_and_push]
-  #   uses: ./.github/workflows/_update_terraform.yml
-  #   with:
-  #     image_tag: main
-  #     deployment_environment: staging
-  #   secrets: inherit
+  deploy:
+    needs: [call_build_and_push]
+    uses: ./.github/workflows/_update_terraform.yml
+    with:
+      image_tag: main
+      deployment_environment: staging
+    secrets: inherit
