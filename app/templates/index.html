@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/table.html' import render_table %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1>Welcome to the DataCite Data Files Service</h1>
+<div class="my-4">Blurb here...</div>
+<h3>Available Data Files</h3>
+{{ render_table(datafiles, show_actions=True, actions_title="Get Access", custom_actions=[('Get Access', 'cloud-arrow-down', ('request_access', [('datafile_slug',':slug')]))]) }}
+{% endblock %}

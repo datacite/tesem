@@ -1,0 +1,12 @@
+# Flask local dev
+instance
+app/instance
+
+# Local ENV
+.env
+
+# Virtual environment
+venv
+
+# PyCharm
+.idea
