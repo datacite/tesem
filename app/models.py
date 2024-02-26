@@ -1,6 +1,8 @@
 from datetime import timedelta
 import boto3
 from botocore.exceptions import ClientError
+from flask import url_for
+
 from database import db, Model
 from flask_jwt_extended import create_access_token
 
@@ -50,3 +52,10 @@ class Datafile(Model):
             # TODO: Add some logging here
             print(f"Couldn't generate presigned URL: {e}")
             return None
+
+    @property
+    def landing_page(self):
+        if self.doi:
+            return f"https://doi.org/{self.doi}"
+        else:
+            return url_for('datafile', datafile_slug=self.slug, _external=True)
