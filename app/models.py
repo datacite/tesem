@@ -16,6 +16,8 @@ class User(Model):
     primary_use = db.Column(db.JSON, nullable=True)
     additional_info = db.Column(db.Text, nullable=True)
     has_accessed = db.Column(db.Boolean, nullable=True)
+    datafile_id = db.Column(db.Integer, db.ForeignKey('datafiles.id'))
+    datafile = db.relationship('Datafile', lazy=True)
 
     def generate_token(self):
         return create_access_token(identity=self.id, expires_delta=timedelta(days=1))
