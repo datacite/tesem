@@ -28,8 +28,7 @@ class MultiCheckboxAtLeastOne():
 class RequestAccessForm(FlaskForm):
     # form based on User properties
     email = StringField('Email', validators=[DataRequired()])
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
     organisation = StringField('Organisational Affiliation', validators=[DataRequired()])
     contact = BooleanField('Can we follow up with you at this email address to discuss your planned use of the data file?')
     primary_use = MultiCheckboxField('What is your planned use for the data? (check all that apply)', choices=use_choices, validators=[MultiCheckboxAtLeastOne()])
