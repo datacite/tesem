@@ -60,6 +60,7 @@ def request_access(datafile_slug):
         u.contact = form.contact.data
         u.primary_use = form.primary_use.data
         u.additional_info = form.additional_info.data
+        u.datafile = datafile
         u.save()
 
         token = u.generate_token()
