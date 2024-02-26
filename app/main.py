@@ -42,7 +42,7 @@ def index():
 def datafile(datafile_slug):
     datafile = Datafile.query.filter_by(slug=datafile_slug).first()
     if not datafile:
-        abort(404)
+        abort(404, f"Datafile {datafile_slug} does not exist")
     return render_template('datafile.html', datafile=datafile)
 
 
@@ -50,7 +50,7 @@ def datafile(datafile_slug):
 def request_access(datafile_slug):
     datafile = Datafile.query.filter_by(slug=datafile_slug).first()
     if not datafile:
-        abort(404)
+        abort(404, f"Datafile {datafile_slug} does not exist")
 
     form = RequestAccessForm()
     if form.validate_on_submit():
@@ -71,7 +71,7 @@ def request_access(datafile_slug):
             send_confirmation_email(u.email, u.name, datafile.name, 24, url_for('download_datafile', datafile_slug=datafile.slug, token=token, _external=True), datafile.landing_page)
             return render_template('success.html', datafile=datafile)
         except HTTPError as e:
-            abort(500) # todo: error handling
+            abort(500, "Something went wrong - please contact support@datacite.org") # todo: error handling
     else:
         return render_template('request.html', datafile=datafile, form=form)
 
@@ -80,22 +80,37 @@ def request_access(datafile_slug):
 def download_datafile(datafile_slug):
     token = request.args.get('token')
     if not token or token == '':
-        abort(403)
+        abort(403, "Missing token - please check the link in your email and try again, making sure to include the ?token= parameter")
     try:
         token_json = decode_token(token)
         u = User.get(token_json['sub'])
         if not u:
-            abort(403)
+            abort(403, "Invalid token - please check the link in your email and try again")
 
         datafile = Datafile.query.filter_by(slug=datafile_slug).first()
         if not datafile:
-            abort(404)
+            abort(404, f"Datafile {datafile_slug} does not exist")
         url = datafile.generate_link()
         u.access_date = datetime.utcnow()
         u.save()
         return redirect(url, code=302)
     except JWTDecodeError:
-        abort(403)
+        abort(403, "Invalid token - please check the link in your email and try again")
+
+
+@app.errorhandler(404)
+def page_not_found(message):
+    return render_template('error.html', code=404, status="Page not found", message=message), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(message):
+    return render_template('error.html', code=500, status="Internal server error", message=message), 500
+
+
+@app.errorhandler(403)
+def forbidden(message):
+    return render_template('error.html', code=403, status="Forbidden", message=message), 403
 
 
 if __name__ == '__main__':
