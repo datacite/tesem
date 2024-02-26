@@ -1,7 +1,7 @@
 from datetime import timedelta
 import boto3
 from botocore.exceptions import ClientError
-from flask import url_for
+from flask import url_for, render_template
 
 from database import db, Model
 from flask_jwt_extended import create_access_token
@@ -59,3 +59,7 @@ class Datafile(Model):
             return f"https://doi.org/{self.doi}"
         else:
             return url_for('datafile', datafile_slug=self.slug, _external=True)
+
+    @property
+    def access_button(self):
+        return render_template("components/access_button.html", link=url_for('request_access', datafile_slug=self.slug))
