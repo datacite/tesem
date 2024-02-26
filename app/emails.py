@@ -10,6 +10,8 @@ This link will be valid for {link_time} hours.
 
 You can download the file here: {url}
 
+For more information about the file and its contents, please see the landing page: {landing_page}
+
 Please contact support@datacite.org with any questions or feedback about the file. 
 
 
@@ -36,7 +38,7 @@ def send_email(to: str, subject: str, body: str) -> dict:
     return response.json()
 
 
-def send_confirmation_email(to: str, name: str, datafile: str, link_time: int, url: str) -> dict:
+def send_confirmation_email(to: str, name: str, datafile: str, link_time: int, url: str, landing_page: str) -> dict:
     return send_email(
         to=to,
         subject=f"Your access link for the {datafile} data file",
@@ -45,5 +47,6 @@ def send_confirmation_email(to: str, name: str, datafile: str, link_time: int, u
             datafile=datafile,
             link_time=link_time,
             url=url,
+            landing_page=landing_page,
         ),
     )
