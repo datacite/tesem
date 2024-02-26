@@ -56,8 +56,7 @@ def request_access(datafile_slug):
         # create user account
         u = User()
         u.email = form.email.data
-        u.first_name = form.first_name.data
-        u.last_name = form.last_name.data
+        u.name = form.name.data
         u.organisation = form.organisation.data
         u.contact = form.contact.data
         u.primary_use = form.primary_use.data
@@ -68,7 +67,7 @@ def request_access(datafile_slug):
 
         token = u.generate_token()
         try:
-            send_confirmation_email(u.email, f"{u.first_name} {u.last_name}", datafile.name, 24, url_for('download_datafile', datafile_slug=datafile.slug, token=token, _external=True), datafile.landing_page)
+            send_confirmation_email(u.email, u.name, datafile.name, 24, url_for('download_datafile', datafile_slug=datafile.slug, token=token, _external=True), datafile.landing_page)
             return render_template('success.html', datafile=datafile)
         except HTTPError as e:
             abort(500) # todo: error handling
