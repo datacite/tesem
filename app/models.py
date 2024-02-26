@@ -11,8 +11,7 @@ class User(Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
-    first_name = db.Column(db.String(120), nullable=False)
-    last_name = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(240), nullable=False)
     organisation = db.Column(db.String(120), nullable=False)
     contact = db.Column(db.Boolean, nullable=False)
     primary_use = db.Column(db.JSON, nullable=True)
