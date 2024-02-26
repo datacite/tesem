@@ -35,6 +35,7 @@ class Datafile(Model):
     size = db.Column(db.String(120), nullable=False)
     filename = db.Column(db.String(120), nullable=False)
     doi = db.Column(db.String(120), nullable=True)
+    blurb = db.Column(db.Text, nullable=True)
 
     def generate_link(self):
         s3_client = boto3.client("s3")
