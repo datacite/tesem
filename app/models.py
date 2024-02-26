@@ -30,6 +30,7 @@ class Datafile(Model):
     slug = db.Column(db.String(24), unique=True, nullable=False, index=True)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    size = db.Column(db.String(120), nullable=False)
     filename = db.Column(db.String(120), nullable=False)
     doi = db.Column(db.String(120), nullable=True)
 
