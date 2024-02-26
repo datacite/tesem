@@ -6,7 +6,7 @@ Dear {name},
 
 Thank you for requesting the {datafile} file, your access link is now available.
 
-This link is a one-time link and will be valid for {link_time} hours. 
+This link will be valid for {link_time} hours. 
 
 You can download the file here: {url}
 
