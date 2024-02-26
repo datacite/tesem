@@ -15,7 +15,8 @@ class User(Model):
     contact = db.Column(db.Boolean, nullable=False)
     primary_use = db.Column(db.JSON, nullable=True)
     additional_info = db.Column(db.Text, nullable=True)
-    has_accessed = db.Column(db.Boolean, nullable=True)
+    access_date = db.Column(db.DateTime, nullable=True)
+    requested_access_date = db.Column(db.DateTime, nullable=True)
     datafile_id = db.Column(db.Integer, db.ForeignKey('datafiles.id'))
     datafile = db.relationship('Datafile', lazy=True)
 
