@@ -32,6 +32,7 @@ bootstrap = Bootstrap5(app)
 
 
 @app.route('/')
+@app.route('/datafiles')
 def index():
     datafiles = Datafile.query.all()
     return render_template('index.html', datafiles=datafiles)
