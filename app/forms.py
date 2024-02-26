@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, TextAreaField, SelectMultipleField, widgets
+from wtforms import StringField, SubmitField, BooleanField, TextAreaField, SelectMultipleField, widgets, RadioField
 from wtforms.validators import DataRequired, StopValidation
 
 use_choices = [
@@ -13,7 +13,7 @@ use_choices = [
 
 
 class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(html_tag='ol', prefix_label=False)
+    widget = widgets.ListWidget(html_tag='ul', prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
 
@@ -30,7 +30,7 @@ class RequestAccessForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     organisation = StringField('Organisational Affiliation', validators=[DataRequired()])
-    contact = BooleanField('Can we follow up with you at this email address to discuss your planned use of the data file?')
+    contact = RadioField('Can we follow up with you at this email address to discuss your planned use of the data file?', choices=[(True, 'Yes'), (False, 'No')], coerce=bool, validators=[DataRequired()])
     primary_use = MultiCheckboxField('What is your planned use for the data? (check all that apply)', choices=use_choices, validators=[MultiCheckboxAtLeastOne()])
     other_use = StringField('Other use')
     additional_info = TextAreaField('Tell us more about how you plan to use the data!')
