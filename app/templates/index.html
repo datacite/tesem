@@ -8,7 +8,8 @@
 {{ render_table(
     datafiles,
     titles = [('name','Name'), ('description','Description'), ('size', 'Size'), ('doi', 'DOI'), ('access_button', 'Access')],
-    safe_columns = ('access_button')
+    safe_columns = ('access_button'),
+    urlize_columns = ('doi')
     )
 }}
 {% endblock %}
