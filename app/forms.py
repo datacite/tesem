@@ -17,12 +17,12 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 
-class MultiCheckboxAtLeastOne():
+class MultiCheckboxAtLeastOne:
     def __call__(self, form, field):
         if len(field.data) == 0:
             raise StopValidation('At least one option must be selected.')
-        if 'other' in field.data and form.other_use.data == '':
-            raise StopValidation('Please specify your other use.')
+        if 'other' in field.data and form.additional_info.data == '':
+            raise StopValidation('Please provide information about your usage below.')
 
 
 class RequestAccessForm(FlaskForm):
@@ -32,6 +32,5 @@ class RequestAccessForm(FlaskForm):
     email = StringField('Email (to receive the link to the data file)*', validators=[DataRequired()])
     contact = RadioField('Can we follow up with you at this email address to discuss your planned use of the data file?*', choices=[(True, 'Yes'), (False, 'No')], coerce=bool, validators=[DataRequired()])
     primary_use = MultiCheckboxField('What is your planned use for the data? (check all that apply)*', choices=use_choices, validators=[MultiCheckboxAtLeastOne()])
-    other_use = StringField('Other use')
     additional_info = TextAreaField('Tell us more about how you plan to use the data!')
     submit = SubmitField('Request Access')
