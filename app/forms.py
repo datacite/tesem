@@ -29,7 +29,7 @@ class RequestAccessForm(FlaskForm):
     # form based on User properties
     name = StringField('Name*', validators=[DataRequired()])
     organisation = StringField('Organisational Affiliation*', validators=[DataRequired()])
-    email = StringField('Email*', validators=[DataRequired()])
+    email = StringField('Email (to receive the link to the data file)*', validators=[DataRequired()])
     contact = RadioField('Can we follow up with you at this email address to discuss your planned use of the data file?*', choices=[(True, 'Yes'), (False, 'No')], coerce=bool, validators=[DataRequired()])
     primary_use = MultiCheckboxField('What is your planned use for the data? (check all that apply)*', choices=use_choices, validators=[MultiCheckboxAtLeastOne()])
     other_use = StringField('Other use')
