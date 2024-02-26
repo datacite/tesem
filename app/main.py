@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Flask, request, abort, redirect, render_template, url_for
 from os import getenv
 from flask_jwt_extended import JWTManager, decode_token
@@ -61,6 +63,7 @@ def request_access(datafile_slug):
         u.primary_use = form.primary_use.data
         u.additional_info = form.additional_info.data
         u.datafile = datafile
+        u.requested_access_date = datetime.utcnow()
         u.save()
 
         token = u.generate_token()
@@ -83,14 +86,12 @@ def download_datafile(datafile_slug):
         u = User.get(token_json['sub'])
         if not u:
             abort(403)
-        if u.has_accessed:
-            abort(403)  # return a message?
 
         datafile = Datafile.query.filter_by(slug=datafile_slug).first()
         if not datafile:
             abort(404)
         url = datafile.generate_link()
-        u.has_accessed = True
+        u.access_date = datetime.utcnow()
         u.save()
         return redirect(url, code=302)
     except JWTDecodeError:
