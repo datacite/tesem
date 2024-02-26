@@ -41,9 +41,10 @@ def index():
 @app.route('/datafiles/<datafile_slug>')
 def datafile(datafile_slug):
     datafile = Datafile.query.filter_by(slug=datafile_slug).first()
+    form = RequestAccessForm()
     if not datafile:
         abort(404, f"Datafile {datafile_slug} does not exist")
-    return render_template('datafile.html', datafile=datafile)
+    return render_template('datafile.html', datafile=datafile, form=form)
 
 
 @app.route('/datafiles/<datafile_slug>/access', methods=['GET', 'POST'])
