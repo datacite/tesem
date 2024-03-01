@@ -3,10 +3,10 @@ from wtforms import StringField, SubmitField, BooleanField, TextAreaField, Selec
 from wtforms.validators import DataRequired, StopValidation, Email
 
 use_choices = [
-    ('research', 'Analyze the dataset, identify trends, build new models.'),
-    ('teaching', 'Prepare lessons, create assignments, teach data analysis skills.'),
-    ('software', 'Build tools, create applications, integrate data sources.'),
-    ('reporting', 'Checking on external use of data.'),
+    ('research', 'Research: Analyze the dataset, identify trends, build new models.'),
+    ('teaching', 'Teaching: Prepare lessons, create assignments, teach data analysis skills.'),
+    ('software', 'Software Development: Build tools, create applications, integrate data sources.'),
+    ('reporting', 'Reporting: Checking on external use of data.'),
     ('notsure', 'I’m not sure yet.'),
     ('other', 'Other (please specify below).')
 ]
