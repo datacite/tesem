@@ -33,4 +33,4 @@ class RequestAccessForm(FlaskForm):
     contact = RadioField('Can we follow up with you at this email address to discuss your planned use of the data file?*', choices=[(True, 'Yes'), (False, 'No')], coerce=bool, validators=[DataRequired()])
     primary_use = MultiCheckboxField('What is your planned use for the data? (check all that apply)*', choices=use_choices, validators=[MultiCheckboxAtLeastOne()])
     additional_info = TextAreaField('Tell us more about how you plan to use the data!')
-    submit = SubmitField('Request Access')
+    submit = SubmitField('Send link')
