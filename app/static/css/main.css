@@ -12580,7 +12580,6 @@ img, svg, video {
 }
 
 a {
-  text-decoration: none;
   color: currentColor;
 }
 
@@ -12608,6 +12607,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
   font-family: "Barlow", sans-serif;
   line-height: 1.5;
   margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 p {
