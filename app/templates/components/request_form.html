@@ -1,2 +1,2 @@
 {% from 'bootstrap5/form.html' import render_form %}
-{{ render_form(form, action=url_for("request_access", datafile_slug=datafile.slug), form_type="horizontal", horizontal_columns=('lg',2,4)) }}
+{{ render_form(form, form_type="horizontal") }}

@@ -38,46 +38,34 @@ def index():
     return render_template('index.html', datafiles=datafiles)
 
 
-@app.route('/datafiles/<datafile_slug>')
+@app.route('/datafiles/<datafile_slug>', methods=['GET', 'POST'])
 def datafile(datafile_slug):
     datafile = Datafile.query.filter_by(slug=datafile_slug).first()
-    form = RequestAccessForm()
     if not datafile:
         abort(404, f"Datafile {datafile_slug} does not exist")
+    form = RequestAccessForm()
+    if form.validate_on_submit():
+        # create user account
+        u = User()
+        u.email = form.email.data
+        u.name = form.name.data
+        u.organisation = form.organisation.data
+        u.contact = form.contact.data
+        u.primary_use = form.primary_use.data
+        u.additional_info = form.additional_info.data
+        u.datafile = datafile
+        u.requested_access_date = datetime.utcnow()
+        u.save()
+
+        token = u.generate_token()
+        try:
+            send_confirmation_email(u.email, u.name, datafile.name, 24,
+                                    url_for('download_datafile', datafile_slug=datafile.slug, token=token, _external=True), datafile.landing_page)
+            return render_template('success.html', datafile=datafile)
+        except HTTPError as e:
+            abort(500, "Something went wrong - please contact support@datacite.org")  # todo: error handling
+
     return render_template('datafile.html', datafile=datafile, form=form)
-
-
-@app.route('/datafiles/<datafile_slug>/access', methods=['GET', 'POST'])
-def request_access(datafile_slug):
-    if request.method == 'POST':
-        datafile = Datafile.query.filter_by(slug=datafile_slug).first()
-        if not datafile:
-            abort(404, f"Datafile {datafile_slug} does not exist")
-
-        form = RequestAccessForm()
-        if form.validate_on_submit():
-            # create user account
-            u = User()
-            u.email = form.email.data
-            u.name = form.name.data
-            u.organisation = form.organisation.data
-            u.contact = form.contact.data
-            u.primary_use = form.primary_use.data
-            u.additional_info = form.additional_info.data
-            u.datafile = datafile
-            u.requested_access_date = datetime.utcnow()
-            u.save()
-
-            token = u.generate_token()
-            try:
-                send_confirmation_email(u.email, u.name, datafile.name, 24, url_for('download_datafile', datafile_slug=datafile.slug, token=token, _external=True), datafile.landing_page)
-                return render_template('success.html', datafile=datafile)
-            except HTTPError as e:
-                abort(500, "Something went wrong - please contact support@datacite.org") # todo: error handling
-        else:
-            return redirect(url_for('datafile', datafile_slug=datafile_slug))
-    else:
-        return redirect(url_for('datafile', datafile_slug=datafile_slug))
 
 
 @app.route('/datafiles/<datafile_slug>/download')

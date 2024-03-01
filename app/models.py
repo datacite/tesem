@@ -62,4 +62,4 @@ class Datafile(Model):
 
     @property
     def access_button(self):
-        return render_template("components/access_button.html", link=url_for('request_access', datafile_slug=self.slug))
+        return render_template("components/access_button.html", link=url_for('datafile', datafile_slug=self.slug))
