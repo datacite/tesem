@@ -117,5 +117,15 @@ def forbidden(message):
     return render_template('error.html', code=403, status="Forbidden", message=message), 403
 
 
+@app.route('/support')
+def support():
+    return redirect("https://support.datacite.org/", code=302)
+
+
+@app.route('/contact')
+def contact():
+    return redirect("https://datacite.org/contact", code=302)
+
+
 if __name__ == '__main__':
     app.run()
