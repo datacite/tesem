@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Request access to {{ datafile.name }}{% endblock %}
 {% block content %}
+<div class="my-4">
 Thank you for requesting the {{ datafile.name }} data file.<br />
 A link to download the file will be emailed to the address you provided.<br />
 If you do not receive a link, check your junk folder or try submitting a new request.<br />
 If you need assistance, contact <a href="mailto:support@datacite.org">support@datacite.org</a>
+</div>
 {% endblock %}
