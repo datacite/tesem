@@ -63,3 +63,7 @@ class Datafile(Model):
     @property
     def access_button(self):
         return render_template("components/access_button.html", link=url_for('datafile', datafile_slug=self.slug))
+
+    @property
+    def short_description(self):
+        return self.description.split('\n')[0]

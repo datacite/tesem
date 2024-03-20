@@ -10,9 +10,10 @@ For questions or feedback, contact <a href="support@datacite.org">support@dataci
 <h3>Available Public Data Files</h3>
 {{ render_table(
     datafiles,
-    titles = [('name','Name'), ('description','Description'), ('size', 'Size'), ('doi', 'DOI'), ('access_button', 'Access')],
-    safe_columns = ('access_button', 'description'),
-    urlize_columns = ('doi')
+    titles = [('name','Name'), ('short_description','Description'), ('size', 'Size'), ('doi', 'DOI'), ('access_button', 'Access')],
+    safe_columns = ('access_button', 'short_description'),
+    urlize_columns = ('doi'),
+        responsive=True
     )
 }}
 {% endblock %}
