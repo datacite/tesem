@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}{{ datafile.name }} landing page{% endblock %}
 {% block content %}
-<h1>{{ datafile.name }} Data File</h1>
-<div class="my-4">{{ datafile.description }}</div>
+<h1>{{ datafile.name }}</h1>
+<div class="my-4">{{ datafile.description | nl2br}}</div>
 <hr>
 <h3>Get access</h3>
 <div class="mb-5">
-{{ datafile.blurb }}
+{{ datafile.blurb | nl2br }}
 </div>
 <div class="col-6">
 {% include "components/request_form.html" %}
