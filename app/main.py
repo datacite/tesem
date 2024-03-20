@@ -1,5 +1,7 @@
 from datetime import datetime
-
+import re
+from jinja2 import pass_eval_context
+from markupsafe import Markup, escape
 from flask import Flask, request, abort, redirect, render_template, url_for
 from os import getenv
 from flask_jwt_extended import JWTManager, decode_token
@@ -29,6 +31,22 @@ app.config["EMAIL_ADDRESS"] = getenv("EMAIL_ADDRESS", "support@datacite.org")
 db.init_app(app)
 jwt = JWTManager(app)
 bootstrap = Bootstrap5(app)
+
+
+@app.template_filter()
+# @pass_eval_context
+def nl2br(value):
+    br = "<br>\n"
+
+    # if eval_ctx.autoescape:
+    #     value = escape(value)
+    #     br = Markup(br)
+
+    result = "\n\n".join(
+        f"<p>{br.join(p.splitlines())}</p>"
+        for p in re.split(r"(?:\r\n|\r(?!\n)|\n){2,}", value)
+    )
+    return Markup(result) #Markup(result) if eval_ctx.autoescape else result
 
 
 @app.route('/')
