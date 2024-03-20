@@ -25,6 +25,14 @@ class MultiCheckboxAtLeastOne:
             raise StopValidation('Please provide information about your usage below.')
 
 
+class EscapedLabel:
+    def __init__(self, label):
+        self.label = label
+
+    def __html__(self):
+        return self.label
+
+
 class RequestAccessForm(FlaskForm):
     # form based on User properties
     name = StringField('Name*', validators=[DataRequired()])
@@ -33,4 +41,5 @@ class RequestAccessForm(FlaskForm):
     contact = RadioField('Can we follow up with you at this email address to discuss your planned use of the data file?*', choices=[(True, 'Yes'), (False, 'No')], coerce=bool, validators=[DataRequired()])
     primary_use = MultiCheckboxField('What is your planned use for the data? (check all that apply)*', choices=use_choices, validators=[MultiCheckboxAtLeastOne()])
     additional_info = TextAreaField('Tell us more about how you plan to use the data!')
+    accept_terms = BooleanField(EscapedLabel('I acknowledge the <a href="https://support.datacite.org/docs/datacite-data-file-use-policy" target="_blank">DataCite Data File Use Policy</a>'), validators=[DataRequired()])
     submit = SubmitField('Send link')
