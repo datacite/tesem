@@ -42,15 +42,14 @@ jobs:
           git add stage/services/datafiles/_tesem.auto.tfvars
           git commit -m "Adding tesem git variables for commit ${{ github.sha }}"
 
-      # - name: Conditionally update production/test environments
-      #   if: ${{ (inputs.deployment_environment == 'production') }}
-      #   run: |
-      #     ./dockerize -template prod-eu-west/services/datafiles/_tesem.auto.tfvars.tmpl:prod-eu-west/services/datafiles/_tesem.auto.tfvars
+      - name: Conditionally update production/test environments
+        if: ${{ (inputs.deployment_environment == 'production') }}
+        run: |
+          ./dockerize -template prod-eu-west/services/datafiles/_tesem.auto.tfvars.tmpl:prod-eu-west/services/datafiles/_tesem.auto.tfvars
       #     ./dockerize -template test/services/datafiles/_tesem.auto.tfvars.tmpl:test/services/datafiles/_tesem.auto.tfvars
-
-          # git add prod-eu-west/services/datafiles/_tesem.auto.tfvars
+          git add prod-eu-west/services/datafiles/_tesem.auto.tfvars
           # git add test/services/datafiles/_tesem.auto.tfvars
-          # git commit -m "Adding tesem git variables for tag ${{ inputs.image_tag }}"
+          git commit -m "Adding tesem git variables for tag ${{ inputs.image_tag }}"
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
