@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block title %}{{ datafile.name }} landing page{% endblock %}
 {% block content %}
-<h1>{{ datafile.name }}</h1>
+<h1 class="mb-1 pb-1">{{ datafile.name }}</h1>
+{% if datafile.doi %}
+<div class="fs-4">
+    <div class="fw-bold d-inline">DOI:</div>&nbsp;<div class="d-inline"><a href="https://doi.org/{{datafile.doi}}">{{ datafile.doi }}</a></div>
+</div>
+{% endif %}
 <div class="my-4">{{ datafile.description | nl2br}}</div>
 <hr>
 <h3>Get access</h3>
