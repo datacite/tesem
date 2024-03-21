@@ -7,7 +7,8 @@
     <div class="fw-bold d-inline">DOI:</div>&nbsp;<div class="d-inline"><a href="https://doi.org/{{datafile.doi}}">{{ datafile.doi }}</a></div>
 </div>
 {% endif %}
-<div class="my-4">{{ datafile.description | nl2br}}</div>
+<div class="my-4"><div class="fw-bold mb-0 pb-0">Description:</div>{{ datafile.description | nl2br}}</div>
+    <div><div class="fw-bold mb-0 pb-0">Size:</div>{{ datafile.size | safe}}</div>
 <hr>
 <h3>Get access</h3>
 <div class="mb-5">
