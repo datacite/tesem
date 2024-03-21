@@ -1,29 +1,31 @@
-from datetime import datetime
 import re
-from jinja2 import pass_eval_context
-from markupsafe import Markup, escape
-from flask import Flask, request, abort, redirect, render_template, url_for
+from datetime import datetime
 from os import getenv
+
+from dotenv import load_dotenv
+from flask import Flask, abort, redirect, render_template, request, url_for
+from flask_bootstrap import Bootstrap5
 from flask_jwt_extended import JWTManager, decode_token
 from flask_jwt_extended.exceptions import JWTDecodeError
 from httpx import HTTPError
-from flask_bootstrap import Bootstrap5
-from dotenv import load_dotenv
+from markupsafe import Markup
 
-from emails import send_confirmation_email
-from models import User, Datafile
 from database import db
+from emails import send_confirmation_email
 from forms import RequestAccessForm
+from models import Datafile, User
 
 load_dotenv()
 app = Flask(__name__)
 
-app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["SECRET_KEY"] = getenv("SECRET_KEY", "changeme")
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL", "sqlite:///tesem-dev.db")
 app.config["JWT_SECRET_KEY"] = getenv("JWT_SECRET_KEY", "changeme")
 app.config["MAILGUN_API_KEY"] = getenv("MAILGUN_API_KEY", "changeme")
-app.config["MAILGUN_ENDPOINT"] = getenv("MAILGUN_ENDPOINT", "https://api.mailgun.net/v3/mg.datacite.org")
+app.config["MAILGUN_ENDPOINT"] = getenv(
+    "MAILGUN_ENDPOINT", "https://api.mailgun.net/v3/mg.datacite.org"
+)
 app.config["MAILGUN_DOMAIN"] = getenv("MAILGUN_DOMAIN", "mg.datacite.org")
 app.config["EMAIL_FROM"] = getenv("EMAIL_FROM", "DataCite Data Files Service")
 app.config["EMAIL_ADDRESS"] = getenv("EMAIL_ADDRESS", "support@datacite.org")
@@ -34,29 +36,23 @@ bootstrap = Bootstrap5(app)
 
 
 @app.template_filter()
-# @pass_eval_context
 def nl2br(value):
     br = "<br>\n"
-
-    # if eval_ctx.autoescape:
-    #     value = escape(value)
-    #     br = Markup(br)
-
     result = "\n\n".join(
         f"<p>{br.join(p.splitlines())}</p>"
         for p in re.split(r"(?:\r\n|\r(?!\n)|\n){2,}", value)
     )
-    return Markup(result) #Markup(result) if eval_ctx.autoescape else result
+    return Markup(result)
 
 
-@app.route('/')
-@app.route('/datafiles')
+@app.route("/")
+@app.route("/datafiles")
 def index():
     datafiles = Datafile.query.all()
-    return render_template('index.html', datafiles=datafiles)
+    return render_template("index.html", datafiles=datafiles)
 
 
-@app.route('/datafiles/<datafile_slug>', methods=['GET', 'POST'])
+@app.route("/datafiles/<datafile_slug>", methods=["GET", "POST"])
 def datafile(datafile_slug):
     datafile = Datafile.query.filter_by(slug=datafile_slug).first()
     if not datafile:
@@ -77,25 +73,43 @@ def datafile(datafile_slug):
 
         token = u.generate_token()
         try:
-            send_confirmation_email(u.email, u.name, datafile.name, 24,
-                                    url_for('download_datafile', datafile_slug=datafile.slug, token=token, _external=True), datafile.landing_page)
-            return render_template('success.html', datafile=datafile)
+            send_confirmation_email(
+                u.email,
+                u.name,
+                datafile.name,
+                24,
+                url_for(
+                    "download_datafile",
+                    datafile_slug=datafile.slug,
+                    token=token,
+                    _external=True,
+                ),
+                datafile.landing_page,
+            )
+            return render_template("success.html", datafile=datafile)
         except HTTPError as e:
-            abort(500, "Something went wrong - please contact support@datacite.org")  # todo: error handling
+            abort(
+                500, "Something went wrong - please contact support@datacite.org"
+            )  # todo: error handling
 
-    return render_template('datafile.html', datafile=datafile, form=form)
+    return render_template("datafile.html", datafile=datafile, form=form)
 
 
-@app.route('/datafiles/<datafile_slug>/download')
+@app.route("/datafiles/<datafile_slug>/download")
 def download_datafile(datafile_slug):
-    token = request.args.get('token')
-    if not token or token == '':
-        abort(403, "Missing token - please check the link in your email and try again, making sure to include the ?token= parameter")
+    token = request.args.get("token")
+    if not token or token == "":
+        abort(
+            403,
+            "Missing token - please check the link in your email and try again, making sure to include the ?token= parameter",
+        )
     try:
         token_json = decode_token(token)
-        u = User.get(token_json['sub'])
+        u = User.get(token_json["sub"])
         if not u:
-            abort(403, "Invalid token - please check the link in your email and try again")
+            abort(
+                403, "Invalid token - please check the link in your email and try again"
+            )
 
         datafile = Datafile.query.filter_by(slug=datafile_slug).first()
         if not datafile:
@@ -110,28 +124,41 @@ def download_datafile(datafile_slug):
 
 @app.errorhandler(404)
 def page_not_found(message):
-    return render_template('error.html', code=404, status="Page not found", message=message), 404
+    return (
+        render_template(
+            "error.html", code=404, status="Page not found", message=message
+        ),
+        404,
+    )
 
 
 @app.errorhandler(500)
 def internal_server_error(message):
-    return render_template('error.html', code=500, status="Internal server error", message=message), 500
+    return (
+        render_template(
+            "error.html", code=500, status="Internal server error", message=message
+        ),
+        500,
+    )
 
 
 @app.errorhandler(403)
 def forbidden(message):
-    return render_template('error.html', code=403, status="Forbidden", message=message), 403
+    return (
+        render_template("error.html", code=403, status="Forbidden", message=message),
+        403,
+    )
 
 
-@app.route('/support')
+@app.route("/support")
 def support():
     return redirect("https://support.datacite.org/", code=302)
 
 
-@app.route('/contact')
+@app.route("/contact")
 def contact():
     return redirect("https://datacite.org/contact", code=302)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()

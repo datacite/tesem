@@ -1,14 +1,15 @@
 from datetime import timedelta
+
 import boto3
 from botocore.exceptions import ClientError
-from flask import url_for, render_template
-
-from database import db, Model
+from flask import render_template, url_for
 from flask_jwt_extended import create_access_token
+
+from database import Model, db
 
 
 class User(Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(240), nullable=False)
@@ -18,15 +19,15 @@ class User(Model):
     additional_info = db.Column(db.Text, nullable=True)
     access_date = db.Column(db.DateTime, nullable=True)
     requested_access_date = db.Column(db.DateTime, nullable=True)
-    datafile_id = db.Column(db.Integer, db.ForeignKey('datafiles.id'))
-    datafile = db.relationship('Datafile', lazy=True)
+    datafile_id = db.Column(db.Integer, db.ForeignKey("datafiles.id"))
+    datafile = db.relationship("Datafile", lazy=True)
 
     def generate_token(self):
         return create_access_token(identity=self.id, expires_delta=timedelta(days=1))
 
 
 class Datafile(Model):
-    __tablename__ = 'datafiles'
+    __tablename__ = "datafiles"
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(24), unique=True, nullable=False, index=True)
     name = db.Column(db.String(120), nullable=False)
@@ -41,10 +42,7 @@ class Datafile(Model):
         try:
             url = s3_client.generate_presigned_url(
                 ClientMethod="get_object",
-                Params={
-                    "Bucket": "pidgraph-data-dumps",
-                    "Key": self.filename
-                },
+                Params={"Bucket": "pidgraph-data-dumps", "Key": self.filename},
                 ExpiresIn=300,
             )
             return url
@@ -58,12 +56,15 @@ class Datafile(Model):
         if self.doi:
             return f"https://doi.org/{self.doi}"
         else:
-            return url_for('datafile', datafile_slug=self.slug, _external=True)
+            return url_for("datafile", datafile_slug=self.slug, _external=True)
 
     @property
     def access_button(self):
-        return render_template("components/access_button.html", link=url_for('datafile', datafile_slug=self.slug))
+        return render_template(
+            "components/access_button.html",
+            link=url_for("datafile", datafile_slug=self.slug),
+        )
 
     @property
     def short_description(self):
-        return self.description.split('\n')[0]
+        return self.description.split("\n")[0]

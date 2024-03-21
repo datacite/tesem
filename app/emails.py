@@ -38,7 +38,9 @@ def send_email(to: str, subject: str, body: str) -> dict:
     return response.json()
 
 
-def send_confirmation_email(to: str, name: str, datafile: str, link_time: int, url: str, landing_page: str) -> dict:
+def send_confirmation_email(
+    to: str, name: str, datafile: str, link_time: int, url: str, landing_page: str
+) -> dict:
     return send_email(
         to=to,
         subject=f"Your access link for the {datafile} data file",
