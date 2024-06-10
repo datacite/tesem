@@ -4,7 +4,7 @@ from flask import current_app
 CONFIRMATION_EMAIL_TEMPLATE = """
 Dear {name},
 
-Thank you for requesting the {datafile} file, your access link is now available.
+Thank you for requesting the {datafile}, your access link is now available.
 
 This link will be valid for {link_time} hours. 
 
@@ -43,7 +43,7 @@ def send_confirmation_email(
 ) -> dict:
     return send_email(
         to=to,
-        subject=f"Your access link for the {datafile} data file",
+        subject=f"Your access link for the {datafile}",
         body=CONFIRMATION_EMAIL_TEMPLATE.format(
             name=name,
             datafile=datafile,
