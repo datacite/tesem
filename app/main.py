@@ -62,11 +62,11 @@ def datafile(datafile_slug):
         # create user account
         u = User()
         u.email = form.email.data
-        u.name = form.name.data
-        u.organisation = form.organisation.data
-        u.contact = form.contact.data
-        u.primary_use = form.primary_use.data
-        u.additional_info = form.additional_info.data
+        # u.name = form.name.data
+        # u.organisation = form.organisation.data
+        # u.contact = form.contact.data
+        # u.primary_use = form.primary_use.data
+        # u.additional_info = form.additional_info.data
         u.datafile = datafile
         u.requested_access_date = datetime.utcnow()
         u.save()
@@ -75,7 +75,6 @@ def datafile(datafile_slug):
         try:
             send_confirmation_email(
                 u.email,
-                u.name,
                 datafile.name,
                 24,
                 url_for(

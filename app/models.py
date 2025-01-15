@@ -12,9 +12,9 @@ class User(Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
-    name = db.Column(db.String(240), nullable=False)
-    organisation = db.Column(db.String(120), nullable=False)
-    contact = db.Column(db.Boolean, nullable=False)
+    name = db.Column(db.String(240), nullable=True)
+    organisation = db.Column(db.String(120), nullable=True)
+    contact = db.Column(db.Boolean, nullable=True)
     primary_use = db.Column(db.JSON, nullable=True)
     additional_info = db.Column(db.Text, nullable=True)
     access_date = db.Column(db.DateTime, nullable=True)
