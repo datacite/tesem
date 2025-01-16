@@ -48,7 +48,7 @@ def nl2br(value):
 @app.route("/")
 @app.route("/datafiles")
 def index():
-    datafiles = Datafile.query.all()
+    datafiles = Datafile.query.order_by(Datafile.id.desc()).all()
     return render_template("index.html", datafiles=datafiles)
 
 
