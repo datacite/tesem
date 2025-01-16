@@ -55,7 +55,7 @@ class RequestAccessForm(FlaskForm):
     #     "Organisational Affiliation*", validators=[DataRequired()]
     # )
     email = EmailField(
-        "Email (to receive the link to the data file)*",
+        "Email (to receive the link to the data file)",
         validators=[DataRequired(), Email()],
     )
     # contact = RadioField(
