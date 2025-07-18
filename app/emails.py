@@ -14,9 +14,9 @@ Please contact support@datacite.org with any questions or feedback about the fil
 
 --
 DataCite – International Data Citation Initiative e.V.
-Web: https://datacite.org/ | Blog: https://datacite.org/blog/ | X: https://twitter.com/datacite
+Web: https://datacite.org/ | Blog: https://datacite.org/blog/ | Bluesky: https://bsky.app/profile/datacite.org
 LinkedIn: https://www.linkedin.com/company/datacite | Mastodon: https://openbiblio.social/@datacite 
-Support Desk: support@datacite.org | Support Site: https://support.datacite.org/ | PID Forum: https://www.pidforum.org/ 
+Support Desk: support@datacite.org | Support Site: https://support.datacite.org/
 Postal address: DataCite -- Welfengarten 1B, 30167 Hannover, Germany
 """
 
